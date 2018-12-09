@@ -1,0 +1,1 @@
+Based on following spec: https://github.com/simplepie/simplepie-ng/wiki/Spec:-iTunes-Podcast-RSS
