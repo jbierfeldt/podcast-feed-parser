@@ -1,0 +1,19 @@
+{
+  "name": "podcast-feed-parser",
+  "version": "1.0.0",
+  "description": "Package for downloading and parsing a podcast feed to a JavaScript object.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "javascript",
+    "podcast",
+    "rss",
+    "parse",
+    "parser",
+    "feed"
+  ],
+  "author": "Jackson Bierfeldt",
+  "license": "ISC"
+}
