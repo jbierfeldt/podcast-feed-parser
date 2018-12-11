@@ -31,15 +31,18 @@ const testFilesPath = path.join(__dirname, 'testfiles')
 
 // console.log(await podcastFeedParser.getPodcastFromURL('http://feeds.gimletmedia.com/hearreplyall'))
 
-// const options = {
-//   fields : {
-//     'meta': ['title', 'description'],
-//     'episodes': ['title', 'description']
-//   },
-//   required: {
-//     'meta': ['title']
-//   }
-// }
-// const sampleFeed = fs.readFileSync(testFilesPath+'/bc-sample.xml', 'utf8').toString()
-// const x = podcastFeedParser.getPodcastFromFeed(sampleFeed, options)
-// console.log(x)
+const options = {
+  fields : {
+    'meta': ['title', 'description', 'imageURL', 'managingEditor'],
+    'episodes': ['title', 'description', 'pubDate']
+  },
+  required: {
+    'meta': ['title']
+  },
+  uncleaned: {
+    'meta': ['description']
+  }
+}
+const sampleFeed = fs.readFileSync(testFilesPath+'/bc-sample.xml', 'utf8').toString()
+const x = podcastFeedParser.getPodcastFromFeed(sampleFeed, options)
+console.log(x)
