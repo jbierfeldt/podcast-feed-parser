@@ -37,7 +37,7 @@ const GET = exports.GET = {
   imageURL: function (node) {
 
     if (node.image) {
-      return node.image[0].url
+      return node.image[0].url[0]
     }
 
     if (node["itunes:image"]) {
@@ -155,11 +155,11 @@ const CLEAN = exports.CLEAN = {
   },
 
   lastUpdated: function (string) {
-    return new Date(string)
+    return new Date(string).toISOString()
   },
 
   pubDate: function (string) {
-    return new Date(string)
+    return new Date(string).toISOString()
   },
 
   complete: function (string) {
@@ -196,7 +196,11 @@ const CLEAN = exports.CLEAN = {
 
 const cleanDefault = exports.cleanDefault = function (node) {
   // return first item of array
-  return (node && node[0]) ? node[0] : node
+  if (node !== undefined && node[0]!== undefined) {
+    return node[0]
+  } else {
+    return node
+  }
 }
 
 /*
@@ -289,7 +293,7 @@ function createEpisodesObjectFromFeed (channel, options) {
       // if multiple episodes were published at the same time,
       // they are then sorted by title
       if (a.order == b.order) {
-        if (a.pubDate.getTime() == b.pubDate.getTime()) {
+        if (a.pubDate == b.pubDate) {
           return a.title > b.title ? -1 : 1
         }
         return b.pubDate > a.pubDate ? 1 : -1

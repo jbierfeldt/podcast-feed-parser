@@ -44,5 +44,5 @@ const options = {
   }
 }
 const sampleFeed = fs.readFileSync(testFilesPath+'/bc-sample.xml', 'utf8').toString()
-const x = podcastFeedParser.getPodcastFromFeed(sampleFeed, options)
-console.log(x)
+const x = podcastFeedParser.getPodcastFromFeed(sampleFeed)
+console.log(x.episodes[0])
