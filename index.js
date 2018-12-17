@@ -8,6 +8,12 @@ const ERRORS = exports.ERRORS = {
   'fetchingError' : new Error("Fetching error.")
 }
 
+/*
+=======================
+=== DEFAULT OPTIONS ===
+=======================
+*/
+
 const DEFAULT = exports.DEFAULT = {
   fields: {
     meta: ['title', 'description', 'subtitle', 'imageURL', 'lastUpdated', 'link',
@@ -20,6 +26,12 @@ const DEFAULT = exports.DEFAULT = {
   required: {},
   uncleaned: {}
 }
+
+/*
+=====================
+=== GET FUNCTIONS ===
+=====================
+*/
 
 const GET = exports.GET = {
   imageURL: function (node) {
@@ -105,6 +117,13 @@ const getDefault = exports.getDefault = function (node, field) {
   return (node[field]) ? node[field] : undefined
 }
 
+
+/*
+=======================
+=== CLEAN FUNCTIONS ===
+=======================
+*/
+
 const CLEAN = exports.CLEAN = {
 
   enclosure: function (object) {
@@ -176,18 +195,34 @@ const CLEAN = exports.CLEAN = {
 }
 
 const cleanDefault = exports.cleanDefault = function (node) {
-  // get first item
+  // return first item of array
   return (node && node[0]) ? node[0] : node
 }
 
+/*
+=================================
+=== OBJECT CREATION FUNCTIONS ===
+=================================
+*/
 
-function getInfo (node, field, required, uncleaned) {
+const getInfo = exports.getInfo = function (node, field, required, uncleaned) {
+  // gets relevant info from podcast feed using options:
+  // @field - string - the desired field name, corresponding with GET and clean
+  //     functions
+  // @required - boolean - if field is set to be required and is undefined,
+  //     throw and error
+  // @uncleaned - boolean - if field should not be cleaned before returning
+
   var info;
 
+  // if field has a GET function, use that
+  // if not, get default value
   info = (GET[field]) ? GET[field].call(this, node) : getDefault(node,field)
 
+  // if info is undefined and field is required, throw require error
   if (required && info === undefined) { throw ERRORS.requiredError }
 
+  // if field is not marked as uncleaned, clean it using CLEAN functions
   if (!uncleaned && info !== undefined) {
     info = (CLEAN[field]) ? CLEAN[field].call(this, info) : cleanDefault(info)
   }
@@ -195,159 +230,34 @@ function getInfo (node, field, required, uncleaned) {
   return info
 }
 
-// general function for extracting useful information from parsed feed
-// if desired information is not present in feed, returns undefined
-// function getInfo (id, isRequired = false, isArray = false, cleanerFunction) {
-//   if (id) {
-//     if (isArray) {
-//       // if value is expected to be an array, returns the value of id
-//       if (cleanerFunction) {
-//         return cleanerFunction.call(this, id)
-//       } else {
-//         return id
-//       }
-//     } else {
-//       // if value is NOT an array, returns first element in id
-//       if (cleanerFunction) {
-//           return cleanerFunction.call(this, id[0])
-//       } else {
-//         return id[0]
-//       }
-//     }
-//   } else if (!id && isRequired === true) {
-//     throw ERRORS.requiredError
-//   } else {
-//     return undefined
-//   }
-// }
+function createMetaObjectFromFeed (channel, options) {
 
-function getURL (object) {
-  return object['$'].url
-}
+  const meta = {}
 
-function getImageURL (object) {
-  return object.url
-}
+  options.fields.meta.forEach( (field) => {
+    const obj = {}
+    var required = false
+    var uncleaned = false
 
-function getHREF (object) {
-  return object['$'].href
-}
-
-function getGUID (object) {
-  return object._
-}
-
-function cleanExplicit (string) {
-  if (['yes', 'explicit', 'true'].indexOf(string.toLowerCase()) >= 0) {
-    return true
-  } else if (['clean', 'no', 'false'].indexOf(string.toLowerCase()) >= 0) {
-    return false
-  } else {
-    return undefined
-  }
-}
-
-function cleanTruth (string) {
-  if (string.toLowerCase == 'yes') {
-    return true
-  } else {
-    return false
-  }
-}
-
-function cleanDate (string) {
-  return new Date(string)
-}
-
-function cleanOwner (object) {
-  return {
-    name: object["itunes:name"][0],
-    email: object["itunes:email"][0]
-  }
-}
-
-function cleanDuration (string) {
-  // gives duration in seconds
-  let times = string.split(':'),
-  sum = 0, mul = 1
-
-  while (times.length > 0) {
-    sum += mul * parseInt(times.pop())
-    mul *= 60
-  }
-
-  return sum
-}
-
-function cleanCategories (array) {
-  // returns categories as an array containing each category/sub-category
-  // grouping in lists. If there is a sub-category, it is the second element
-  // of an array.
-  const categoriesArray = array.map( item => {
-    let category = []
-    category.push(item['$'].text) // primary category
-    if (item['itunes:category']) { // sub-category
-      category.push(item['itunes:category'][0]['$'].text)
+    if (options.required && options.required.meta) {
+      var required = (options.required.meta.indexOf(field) >= 0)
     }
-    return category
+
+    if (options.uncleaned && options.uncleaned.meta) {
+      var uncleaned = (options.uncleaned.meta.indexOf(field) >= 0)
+    }
+
+    obj[field] = getInfo(channel, field, required, uncleaned)
+
+    Object.assign(meta, obj)
   })
 
-  return categoriesArray
-}
-
-function parseXMLFeed (feedText) {
-  return new Promise((resolve, reject) => {
-        parseString(feedText, (error, result) => {
-            if (error) { reject(error) }
-            resolve(result)
-        })
-    })
-}
-
-function parseLocalXMLFeed (feedText) {
-    let feed = {}
-    parseString(feedText, (error, result) => {
-      if (error) {
-        throw ERRORS.parsingError
-      }
-      Object.assign(feed, result)
-      return result
-    })
-    return (feed)
-}
-
-async function fetchFeed (url) {
-  try {
-    const feedResponse = await fetch(url)
-    const feedText = await feedResponse.text()
-    const feedObject = await parseXMLFeed(feedText)
-    return feedObject
-  } catch (err) {
-    throw ERRORS.fetchingError
-  }
+  return meta
 }
 
 // function builds episode objects from parsed podcast feed
 function createEpisodesObjectFromFeed (channel, options) {
   let episodes = []
-  // channel.item.forEach( (item) => {
-  //   episodes.push({
-  //     title: getInfo(item.title, true),
-  //     guid: getInfo(item.guid, true, false, getGUID),
-  //     language: getInfo(channel.language, false, true),
-  //     link: getInfo(item.link),
-  //     imageURL: getInfo(item["itunes:image"], false, false, getHREF),
-  //     publicationDate: getInfo(item.pubDate, false, false, cleanDate),
-  //     audioFileURL: getInfo(item.enclosure, true, false, getURL),
-  //     duration: getInfo(item["itunes:duration"], false, false, cleanDuration),
-  //     description: getInfo(item.description),
-  //     subtitle: getInfo(item["itunes:subtitle"]),
-  //     summary: getInfo(item["itunes:summary"]),
-  //     blocked: getInfo(item["itunes:block"], false, false, cleanTruth),
-  //     explicit: getInfo(item["itunes:explicit"], false, false, cleanExplicit),
-  //     order: getInfo(item["itunes:order"])
-  //   })
-  // })
 
   channel.item.forEach( (item) => {
     const episode = {}
@@ -400,48 +310,49 @@ function createEpisodesObjectFromFeed (channel, options) {
   return episodes
 }
 
-function createMetaObjectFromFeed (channel, options) {
-  // const meta = {
-  //   title: getInfo(channel.title, true),
-  //   guid: getInfo(channel.guid, false, false, getGUID),
-  //   description: getInfo(channel.description, true),
-  //   subtitle: getInfo(channel["itunes:subtitle"]),
-  //   imageURL: getInfo(channel.image, true, false, getImageURL),
-  //   lastUpdated: getInfo(channel.lastBuildDate, false, false, cleanDate),
-  //   link: getInfo(channel.link),
-  //   language: getInfo(channel.language, false, true),
-  //   editor: getInfo(channel.managingEditor),
-  //   author: getInfo(channel["itunes:author"]),
-  //   summary: getInfo(channel["itunes:summary"]),
-  //   categories: getInfo(channel["itunes:category"], false, true, cleanCategories),
-  //   owner: getInfo(channel["itunes:owner"], false, false, cleanOwner),
-  //   explicit: getInfo(channel["itunes:explicit"], false, false, cleanExplicit),
-  //   complete: getInfo(channel["itunes:complete"], false, false, cleanTruth),
-  //   blocked: getInfo(channel["itunes:block"], false, false, cleanTruth)
-  // }
+/*
+======================
+=== FEED FUNCTIONS ===
+======================
+*/
 
-  const meta = {}
-
-  options.fields.meta.forEach( (field) => {
-    const obj = {}
-    var required = false
-    var uncleaned = false
-
-    if (options.required && options.required.meta) {
-      var required = (options.required.meta.indexOf(field) >= 0)
-    }
-
-    if (options.uncleaned && options.uncleaned.meta) {
-      var uncleaned = (options.uncleaned.meta.indexOf(field) >= 0)
-    }
-
-    obj[field] = getInfo(channel, field, required, uncleaned)
-
-    Object.assign(meta, obj)
-  })
-
-  return meta
+function promiseParseXMLFeed (feedText) {
+  return new Promise((resolve, reject) => {
+        parseString(feedText, (error, result) => {
+            if (error) { reject(ERRORS.parsingError) }
+            resolve(result)
+        })
+    })
 }
+
+function parseXMLFeed (feedText) {
+    let feed = {}
+    parseString(feedText, (error, result) => {
+      if (error) {
+        throw ERRORS.parsingError
+      }
+      Object.assign(feed, result)
+      return result
+    })
+    return (feed)
+}
+
+async function fetchFeed (url) {
+  try {
+    const feedResponse = await fetch(url)
+    const feedText = await feedResponse.text()
+    const feedObject = await promiseParseXMLFeed(feedText)
+    return feedObject
+  } catch (err) {
+    throw ERRORS.fetchingError
+  }
+}
+
+/*
+=======================
+=== FINAL FUNCTIONS ===
+=======================
+*/
 
 const getPodcastFromURL = exports.getPodcastFromURL = async function (url, params) {
   try {
@@ -469,7 +380,7 @@ const getPodcastFromFeed = exports.getPodcastFromFeed = function (feed, params) 
   try {
     let options = (typeof params === 'undefined') ? DEFAULT : params
 
-    const feedObject = parseLocalXMLFeed(feed)
+    const feedObject = parseXMLFeed(feed)
     const channel = feedObject.rss.channel[0]
 
     if (channel["itunes:new-feed-url"]) {
@@ -485,12 +396,3 @@ const getPodcastFromFeed = exports.getPodcastFromFeed = function (feed, params) 
     throw err
   }
 }
-
-// const url = "http://feeds.gimletmedia.com/hearreplyall"
-// const url = "http://onmargins.craigmod.com/rss"
-// const url = "https://allthingschemical.libsyn.com/rss"
-// const url = "http://localhost:7000/testrss.xml"
-// testCreatePodcastFeedObject(url)
-// const url = "http://feeds.gimletmedia.com/hearreplyall"
-// printPodcast(url)
-// writePodcast(url)
