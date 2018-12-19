@@ -438,7 +438,7 @@ const getPodcastFromURL = exports.getPodcastFromURL = async function (url, param
     const channel = feedResponse.rss.channel[0]
 
     if (channel["itunes:new-feed-url"]) {
-      getPodcastFromURL(channel["itunes:new-feed-url"])
+      return await getPodcastFromURL(channel["itunes:new-feed-url"][0], params)
     }
 
     const meta = createMetaObjectFromFeed(channel, options)
@@ -460,7 +460,7 @@ const getPodcastFromFeed = exports.getPodcastFromFeed = function (feed, params) 
     const channel = feedObject.rss.channel[0]
 
     if (channel["itunes:new-feed-url"]) {
-      getPodcastFromURL(channel["itunes:new-feed-url"])
+      console.warn("Warning: Feed includes \<itunes:new-feed-url\> element, which indicates that the feed being parsed may be outdated.\n\n")
     }
 
     const meta = createMetaObjectFromFeed(channel, options)

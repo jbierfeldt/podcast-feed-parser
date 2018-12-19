@@ -3,10 +3,10 @@ const fs = require('fs')
 const path = require('path')
 const testFilesPath = path.join(__dirname, 'testfiles')
 
-// //
+// // //
 // async function main () {
 //   try {
-//     var x = await podcastFeedParser.getPodcastFromURL('http://feeds.gimletmedia.com/hearreplyall')
+//     var x = await podcastFeedParser.getPodcastFromURL('http://localhost:7000/bc-sample-new-feed-url.xml')
 //   } catch (err) {
 //     var x = err
 //   }
@@ -62,6 +62,6 @@ const testFilesPath = path.join(__dirname, 'testfiles')
 //     'episodes': ['title', 'pubDate']
 //   }
 // }
-// const sampleFeed = fs.readFileSync(testFilesPath+'/bc-sample-order.xml', 'utf8').toString()
-// const x = podcastFeedParser.getPodcastFromFeed(sampleFeed)
+const sampleFeed = fs.readFileSync(testFilesPath+'/bc-sample-new-feed-url.xml', 'utf8').toString()
+const x = podcastFeedParser.getPodcastFromFeed(sampleFeed)
 // console.log(x)
