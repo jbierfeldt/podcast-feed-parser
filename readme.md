@@ -44,3 +44,20 @@ Podcast Object with default fields:
 	]
 }
 ```
+
+## Fetching Remote Feeds
+
+`podcast-feed-parser` can also fetch and parse remote feeds in both the browser and server environment thanks to `isomorphic-fetch`. Simply call `getPodcastFromURL(url, options)`. Functions which fetch remote feeds must be asynchronous and be utilize async/await.
+
+```
+const podcastFeedParser = require("podcast-feed-parser")
+
+async function getNumberOfEpisodes (url) {
+	const podcast = await podcastFeedParser.getPodcastFromURL(url)
+	console.log(podcast.episodes.length)
+}
+
+getNumberOfEpisodes('http://feeds.gimletmedia.com/hearreplyall')
+// 146
+
+```
