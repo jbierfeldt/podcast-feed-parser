@@ -221,6 +221,15 @@ describe("Checking re-ordering functionality", function() {
   })
 })
 
-/*  tests to write:
-- link redirect
-*/
+describe("Checking handling of new-feed-url", function() {
+  it('should ignore new-feed-url element and parse feed normally', function() {
+    const sampleFeed = fs.readFileSync(testFilesPath+'/bc-sample-new-feed-url.xml', 'utf8').toString()
+    const podcast = podcastFeedParser.getPodcastFromFeed(sampleFeed)
+    expect(podcast.meta.title).to.equal('All Things Chemical')
+  })
+
+  it('should redirect and fetch new feed', async function() {
+    const podcast = await podcastFeedParser.getPodcastFromURL('http://sandbox.bierfeldt.me/podcast-feed-parser/testfiles/bc-sample-new-feed-url.xml')
+    expect(podcast.meta.title).to.equal('Reply All')
+  })
+})

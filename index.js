@@ -460,7 +460,7 @@ const getPodcastFromFeed = exports.getPodcastFromFeed = function (feed, params) 
     const channel = feedObject.rss.channel[0]
 
     if (channel["itunes:new-feed-url"]) {
-      console.warn("Warning: Feed includes \<itunes:new-feed-url\> element, which indicates that the feed being parsed may be outdated.\n\n")
+      console.warn("\nWarning: Feed includes \<itunes:new-feed-url\> element, which indicates that the feed being parsed may be outdated.\n")
     }
 
     const meta = createMetaObjectFromFeed(channel, options)
