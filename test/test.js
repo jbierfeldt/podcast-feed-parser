@@ -201,10 +201,26 @@ describe('Checking custom options', function () {
     const podcast = podcastFeedParser.getPodcastFromFeed(sampleFeed, options)
     expect(podcast.meta.title).to.be.an('array')
   })
+})
 
+describe("Checking re-ordering functionality", function() {
+  it('should list episodes in order described by order tags in the rss feed', function() {
+    const sampleFeed = fs.readFileSync(testFilesPath+'/bc-sample-order.xml', 'utf8').toString()
+    const podcast = podcastFeedParser.getPodcastFromFeed(sampleFeed)
+    expect(podcast.episodes[3].title).to.equal('Chemical Regulation in the Middle East') // order 1
+    expect(podcast.episodes[2].title).to.equal('Animal Testing and New TSCA') // order 2
+    expect(podcast.episodes[1].title).to.equal('Introducing All Things Chemical ') // default ordering by pubDate
+  })
+
+  it('should order by title when no order is specified and pubDate is the same', async function() {
+    const sampleFeed = fs.readFileSync(testFilesPath+'/replyall-sample-ordering.xml', 'utf8').toString()
+    const podcast = podcastFeedParser.getPodcastFromFeed(sampleFeed)
+    expect(podcast.episodes[2].title).to.equal('Reply All Mic Test') // first by pubDate
+    expect(podcast.episodes[1].title).to.equal('#1 A Stranger Says I Love You') // pubDate is the same, order by title
+    expect(podcast.episodes[0].title).to.equal('#2 The Secret, Gruesome Internet For Doctors') // pubDate is the same, order by title
+  })
 })
 
 /*  tests to write:
-- reordering
 - link redirect
 */

@@ -62,6 +62,6 @@ const testFilesPath = path.join(__dirname, 'testfiles')
 //     'episodes': ['title', 'pubDate']
 //   }
 // }
-// const sampleFeed = fs.readFileSync(testFilesPath+'/bc-sample.xml', 'utf8').toString()
-// const x = podcastFeedParser.getPodcastFromFeed(sampleFeed, options)
+// const sampleFeed = fs.readFileSync(testFilesPath+'/bc-sample-order.xml', 'utf8').toString()
+// const x = podcastFeedParser.getPodcastFromFeed(sampleFeed)
 // console.log(x)

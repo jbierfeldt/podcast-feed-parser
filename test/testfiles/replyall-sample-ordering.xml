@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" media="screen" href="/~d/styles/rss2enclosuresfull.xsl"?><?xml-stylesheet type="text/css" media="screen" href="http://feeds.gimletmedia.com/~d/styles/itemcontent.css"?><rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:googleplay="http://www.google.com/schemas/play-podcasts/1.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0">
+<channel>
+
+	<title>Reply All</title>
+	<link>http://gimletmedia.com/shows/reply-all</link>
+	<language>en</language>
+	<copyright>All rights reserved</copyright>
+	<description>"'A podcast about the internet' that is actually an unfailingly original exploration of modern life and how to survive it." - The Guardian. Hosted by PJ Vogt and Alex Goldman, from Gimlet.</description>
+	<image>
+		<url>https://static.megaphone.fm/podcasts/05f71746-a825-11e5-aeb5-a7a572df575e/image/uploads_2F1516902193862-jqkml22bswo-cee641b4533ddb31a5a7ab656fe45116_2FCURRENT_Reply%2BAll%2BLogo.png</url>
+		<title>Reply All</title>
+		<link>http://gimletmedia.com/shows/reply-all</link>
+	</image>
+	<itunes:explicit>yes</itunes:explicit>
+	<itunes:type>episodic</itunes:type>
+	<itunes:subtitle>"'A podcast about the internet' that is actually an unfailingly original exploration of modern life and how to survive it." - The Guardian. Hosted by PJ Vogt and Alex Goldman, from Gimlet.</itunes:subtitle>
+	<itunes:author>Gimlet</itunes:author>
+	<itunes:summary>"'A podcast about the internet' that is actually an unfailingly original exploration of modern life and how to survive it." - The Guardian. Hosted by PJ Vogt and Alex Goldman, from Gimlet.</itunes:summary>
+	<itunes:owner>
+		<itunes:name>Gimlet</itunes:name>
+		<itunes:email>feeds@soundcloud.com</itunes:email>
+	</itunes:owner>
+	<itunes:image href="https://static.megaphone.fm/podcasts/05f71746-a825-11e5-aeb5-a7a572df575e/image/uploads_2F1516902193862-jqkml22bswo-cee641b4533ddb31a5a7ab656fe45116_2FCURRENT_Reply%2BAll%2BLogo.png" />
+	<itunes:category text="Technology">
+	</itunes:category>
+	<itunes:category text="Society &amp; Culture">
+	</itunes:category>
+	<itunes:category text="Arts">
+	</itunes:category>
+	<atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="self" type="application/rss+xml" href="http://feeds.gimletmedia.com/hearreplyall" /><feedburner:info xmlns:feedburner="http://rssnamespace.org/feedburner/ext/1.0" uri="hearreplyall" /><atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="hub" href="http://pubsubhubbub.appspot.com/" /><media:copyright>All rights reserved</media:copyright><media:thumbnail url="https://static.megaphone.fm/podcasts/05f71746-a825-11e5-aeb5-a7a572df575e/image/uploads_2F1516902193862-jqkml22bswo-cee641b4533ddb31a5a7ab656fe45116_2FCURRENT_Reply%2BAll%2BLogo.png" /><media:keywords>Storytelling</media:keywords><media:category scheme="http://www.itunes.com/dtds/podcast-1.0.dtd">Technology</media:category><media:category scheme="http://www.itunes.com/dtds/podcast-1.0.dtd">Society &amp; Culture</media:category><media:category scheme="http://www.itunes.com/dtds/podcast-1.0.dtd">Arts</media:category><itunes:keywords>Storytelling</itunes:keywords>
+	<item>
+		<title>#1 A Stranger Says I Love You</title>
+		<description>What happens when a woman sends a stocky blond stranger to tell her ex she loves him.&amp;nbsp;</description>
+		<pubDate>Mon, 24 Nov 2014 13:00:00 -0000</pubDate>
+		<itunes:author>Gimlet</itunes:author>
+		<itunes:episodeType>full</itunes:episodeType>
+		<itunes:subtitle>What happens when a woman sends a stocky blond st…</itunes:subtitle>
+		<itunes:summary>
+			<![CDATA[What happens when a woman sends a stocky blond stranger to tell her ex she loves him.&nbsp;]]>
+		</itunes:summary>
+		<itunes:duration>1339</itunes:duration>
+		<itunes:explicit>yes</itunes:explicit>
+		<guid isPermaLink="false"><![CDATA[tag:soundcloud,2010:tracks/178485892]]></guid>
+		<enclosure url="https://traffic.megaphone.fm/GLT4726279763.mp3" length="19745645" type="audio/mpeg" />
+		<dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Gimlet</dc:creator><media:content url="https://traffic.megaphone.fm/GLT4726279763.mp3" fileSize="19745645" type="audio/mpeg" /><itunes:keywords>Storytelling</itunes:keywords></item>
+		<item>
+			<title>#2 The Secret, Gruesome Internet For Doctors</title>
+			<description>An app called Figure One wants to be Instagram, but for doctors. Why would doctors need their own Instagram? We spy on the secret &amp;amp; disgusting medical internet, plus we speak to one of its residents.&amp;nbsp;</description>
+			<pubDate>Mon, 24 Nov 2014 13:00:00 -0000</pubDate>
+			<itunes:author>Gimlet</itunes:author>
+			<itunes:episodeType>full</itunes:episodeType>
+			<itunes:subtitle>An app called Figure One wants to be Instagram, b…</itunes:subtitle>
+			<itunes:summary>
+				<![CDATA[An app called Figure One wants to be Instagram, but for doctors. Why would doctors need their own Instagram? We spy on the secret &amp; disgusting medical internet, plus we speak to one of its residents.&nbsp;]]>
+			</itunes:summary>
+			<itunes:duration>1346</itunes:duration>
+			<itunes:explicit>yes</itunes:explicit>
+			<guid isPermaLink="false"><![CDATA[tag:soundcloud,2010:tracks/178489631]]></guid>
+			<enclosure url="https://traffic.megaphone.fm/GLT5626794585.mp3" length="19856822" type="audio/mpeg" />
+			<dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Gimlet</dc:creator><media:content url="https://traffic.megaphone.fm/GLT5626794585.mp3" fileSize="19856822" type="audio/mpeg" /><itunes:keywords>Storytelling</itunes:keywords></item>
+			<item>
+				<title>Reply All Mic Test</title>
+				<description>A podcast about the internet, hosted by PJ Vogt and Alex Goldman.  From Gimlet Media.  Coming soon. </description>
+				<pubDate>Thu, 06 Nov 2014 23:25:29 -0000</pubDate>
+				<itunes:author>Gimlet</itunes:author>
+				<itunes:episodeType>full</itunes:episodeType>
+				<itunes:subtitle>A podcast about the internet, hosted by PJ Vogt a…</itunes:subtitle>
+				<itunes:summary>
+					<![CDATA[A podcast about the internet, hosted by PJ Vogt and Alex Goldman.  From Gimlet Media.  Coming soon. ]]>
+				</itunes:summary>
+				<itunes:duration>16</itunes:duration>
+				<itunes:explicit>yes</itunes:explicit>
+				<guid isPermaLink="false"><![CDATA[tag:soundcloud,2010:tracks/175708017]]></guid>
+				<enclosure url="https://traffic.megaphone.fm/GLT8886497634.mp3" length="642612" type="audio/mpeg" />
+				<dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Gimlet</dc:creator><media:content url="https://traffic.megaphone.fm/GLT8886497634.mp3" fileSize="642612" type="audio/mpeg" /><itunes:keywords>Storytelling</itunes:keywords></item>
+				<media:credit role="author">Gimlet</media:credit><media:rating>adult</media:rating><media:description type="plain">"'A podcast about the internet' that is actually an unfailingly original exploration of modern life and how to survive it." - The Guardian. Hosted by PJ Vogt and Alex Goldman, from Gimlet.</media:description></channel>
+			</rss>
