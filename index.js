@@ -5,13 +5,14 @@ const parseString = require('xml2js').parseString
 const ERRORS = exports.ERRORS = {
   'parsingError' : new Error("Parsing error."),
   'requiredError' : new Error("One or more required values are missing from feed."),
-  'fetchingError' : new Error("Fetching error.")
+  'fetchingError' : new Error("Fetching error."),
+  'optionsError' : new Error("Invalid options.")
 }
 
 /*
-=======================
-=== DEFAULT OPTIONS ===
-=======================
+============================================
+=== DEFAULT OPTIONS and OPTIONS BUILDING ===
+============================================
 */
 
 const DEFAULT = exports.DEFAULT = {
@@ -23,8 +24,77 @@ const DEFAULT = exports.DEFAULT = {
             'link', 'language', 'enclosure', 'duration', 'summary', 'blocked',
             'explicit', 'order']
   },
-  required: {},
-  uncleaned: {}
+  required: {
+    meta: [],
+    episodes: []
+  },
+  uncleaned: {
+    meta: [],
+    episodes: []
+  }
+}
+
+// from https://stackoverflow.com/questions/1584370/how-to-merge-two-arrays-in-javascript-and-de-duplicate-items
+function mergeDedupe(arr)
+{
+  return [...new Set([].concat(...arr))];
+}
+
+const buildOptions = exports.buildOptions = function (params) {
+  try {
+
+    // default options
+    // tried to accomplish this by referencing the DEFAULT object,
+    // but ran into problems with mutation when doing Object.assign(options[key], params[key])
+    let options = {
+      fields: {
+        meta: ['title', 'description', 'subtitle', 'imageURL', 'lastUpdated', 'link',
+                'language', 'editor', 'author', 'summary', 'categories', 'owner',
+                'explicit', 'complete', 'blocked'],
+        episodes: ['title', 'description', 'subtitle', 'imageURL', 'pubDate',
+                'link', 'language', 'enclosure', 'duration', 'summary', 'blocked',
+                'explicit', 'order']
+      },
+      required: {
+        meta: [],
+        episodes: []
+      },
+      uncleaned: {
+        meta: [],
+        episodes: []
+      }
+    }
+
+    // if no options parameters given, use default
+    if (typeof params === 'undefined') {
+      options = DEFAULT
+      return options
+    }
+
+    // merge empty options and given options
+    Object.keys(options).forEach( key => {
+      if (params[key] !== undefined) {
+        Object.assign(options[key], params[key])
+      }
+    })
+
+    // if 'default' given in parameters, merge default options with given custom options
+    //  and dedupe
+    if (options.fields.meta.indexOf('default') >= 0) {
+      options.fields.meta = mergeDedupe([DEFAULT.fields.meta, params.fields.meta])
+      options.fields.meta.splice(options.fields.meta.indexOf('default'), 1)
+    }
+
+    if (options.fields.episodes.indexOf('default') >= 0) {
+      options.fields.episodes = mergeDedupe([DEFAULT.fields.episodes, params.fields.episodes])
+      options.fields.episodes.splice(options.fields.episodes.indexOf('default'), 1)
+    }
+
+    return options
+
+  } catch (err) {
+    throw ERRORS.optionsError
+  }
 }
 
 /*
@@ -209,12 +279,10 @@ const cleanDefault = exports.cleanDefault = function (node) {
 =================================
 */
 
-const getInfo = exports.getInfo = function (node, field, required, uncleaned) {
+const getInfo = exports.getInfo = function (node, field, uncleaned) {
   // gets relevant info from podcast feed using options:
   // @field - string - the desired field name, corresponding with GET and clean
   //     functions
-  // @required - boolean - if field is set to be required and is undefined,
-  //     throw and error
   // @uncleaned - boolean - if field should not be cleaned before returning
 
   var info;
@@ -223,12 +291,10 @@ const getInfo = exports.getInfo = function (node, field, required, uncleaned) {
   // if not, get default value
   info = (GET[field]) ? GET[field].call(this, node) : getDefault(node,field)
 
-  // if info is undefined and field is required, throw require error
-  if (required && info === undefined) { throw ERRORS.requiredError }
-
   // if field is not marked as uncleaned, clean it using CLEAN functions
   if (!uncleaned && info !== undefined) {
     info = (CLEAN[field]) ? CLEAN[field].call(this, info) : cleanDefault(info)
+  } else {
   }
 
   return info
@@ -240,21 +306,24 @@ function createMetaObjectFromFeed (channel, options) {
 
   options.fields.meta.forEach( (field) => {
     const obj = {}
-    var required = false
     var uncleaned = false
-
-    if (options.required && options.required.meta) {
-      var required = (options.required.meta.indexOf(field) >= 0)
-    }
 
     if (options.uncleaned && options.uncleaned.meta) {
       var uncleaned = (options.uncleaned.meta.indexOf(field) >= 0)
     }
 
-    obj[field] = getInfo(channel, field, required, uncleaned)
+    obj[field] = getInfo(channel, field, uncleaned)
 
     Object.assign(meta, obj)
   })
+
+  if (options.required && options.required.meta) {
+    options.required.meta.forEach( (field) => {
+      if (Object.keys(meta).indexOf(field) < 0) {
+        throw ERRORS.requiredError
+      }
+    })
+  }
 
   return meta
 }
@@ -268,21 +337,24 @@ function createEpisodesObjectFromFeed (channel, options) {
 
     options.fields.episodes.forEach( (field) => {
       const obj = {}
-      var required = false
       var uncleaned = false
-
-      if (options.required && options.required.episodes) {
-        var required = (options.required.episodes.indexOf(field) >= 0)
-      }
 
       if (options.uncleaned && options.uncleaned.episodes) {
         var uncleaned = (options.uncleaned.episodes.indexOf(field) >= 0)
       }
 
-      obj[field] = getInfo(item, field, required, uncleaned)
+      obj[field] = getInfo(item, field, uncleaned)
 
       Object.assign(episode, obj)
     })
+
+    if (options.required && options.required.episodes) {
+      options.required.episodes.forEach( (field) => {
+        if (Object.keys(episode).indexOf(field) < 0) {
+          throw ERRORS.requiredError
+        }
+      })
+    }
 
     episodes.push(episode)
   })
@@ -360,7 +432,7 @@ async function fetchFeed (url) {
 
 const getPodcastFromURL = exports.getPodcastFromURL = async function (url, params) {
   try {
-    let options = (typeof params === 'undefined') ? DEFAULT : params
+    const options = buildOptions(params)
 
     const feedResponse = await fetchFeed(url)
     const channel = feedResponse.rss.channel[0]
@@ -382,7 +454,7 @@ const getPodcastFromURL = exports.getPodcastFromURL = async function (url, param
 
 const getPodcastFromFeed = exports.getPodcastFromFeed = function (feed, params) {
   try {
-    let options = (typeof params === 'undefined') ? DEFAULT : params
+    const options = buildOptions(params)
 
     const feedObject = parseXMLFeed(feed)
     const channel = feedObject.rss.channel[0]

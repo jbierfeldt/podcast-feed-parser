@@ -112,8 +112,99 @@ describe('Getting Podcast Object from Sample Feed', function () {
         expect(podcast.episodes[0].explicit).to.equal(false)
         expect(podcast.episodes[0].order).to.be.undefined
       })
-
     })
-
   })
 })
+
+describe('Checking custom options', function () {
+  const sampleFeed = fs.readFileSync(testFilesPath+'/bc-sample-custom-tags.xml', 'utf8').toString()
+  it('should return object with all default fields when no options object is provided', function() {
+    const podcast = podcastFeedParser.getPodcastFromFeed(sampleFeed)
+    expect(podcast.meta).to.be.an('object').that.contains.keys('title', 'description', 'subtitle', 'imageURL', 'lastUpdated', 'link',
+      'language', 'editor', 'author', 'summary', 'categories', 'owner',
+      'explicit', 'complete', 'blocked')
+    expect(podcast.episodes[0]).to.be.an('object').that.contains.keys('title', 'description', 'subtitle', 'imageURL', 'pubDate',
+        'link', 'language', 'enclosure', 'duration', 'summary', 'blocked',
+        'explicit', 'order')
+  })
+
+  it('should return object with all default fields when default is specified in options object', function() {
+    const options = {
+      fields : {
+        'meta': ['default'],
+        'episodes': ['default']
+      }
+    }
+    const podcast = podcastFeedParser.getPodcastFromFeed(sampleFeed, options)
+    expect(podcast.meta).to.be.an('object').that.contains.keys('title', 'description', 'subtitle', 'imageURL', 'lastUpdated', 'link',
+      'language', 'editor', 'author', 'summary', 'categories', 'owner',
+      'explicit', 'complete', 'blocked')
+    expect(podcast.episodes[0]).to.be.an('object').that.contains.keys('title', 'description', 'subtitle', 'imageURL', 'pubDate',
+        'link', 'language', 'enclosure', 'duration', 'summary', 'blocked',
+        'explicit', 'order')
+  })
+
+  it('should return object with default fields + custom field', function() {
+    const options = {
+      fields : {
+        'meta': ['default', 'webMaster'],
+        'episodes': ['default', 'timeline']
+      }
+    }
+    const podcast = podcastFeedParser.getPodcastFromFeed(sampleFeed, options)
+    expect(podcast.meta).to.be.an('object').that.contains.keys('title', 'description', 'subtitle', 'imageURL', 'lastUpdated', 'link',
+      'language', 'editor', 'author', 'summary', 'categories', 'owner',
+      'explicit', 'complete', 'blocked', 'webMaster')
+    expect(podcast.episodes[0]).to.be.an('object').that.contains.keys('title', 'description', 'subtitle', 'imageURL', 'pubDate',
+        'link', 'language', 'enclosure', 'duration', 'summary', 'blocked',
+        'explicit', 'order', 'timeline')
+  })
+
+  it('should return object with only given custom fields', function() {
+    const options = {
+      fields : {
+        'meta': ['title', 'description', 'webMaster'],
+        'episodes': ['title', 'pubDate', 'timeline']
+      }
+    }
+    const podcast = podcastFeedParser.getPodcastFromFeed(sampleFeed, options)
+    expect(podcast.meta).to.be.an('object').that.contains.keys('title', 'description', 'webMaster')
+    expect(podcast.episodes[0]).to.be.an('object').that.contains.keys('title', 'pubDate', 'timeline')
+  })
+
+  it('should return valid object because required field exists', function() {
+    const options = {
+      required : {
+        meta: ['title'],
+        episodes: ['pubDate']
+      }
+    }
+    const podcast = podcastFeedParser.getPodcastFromFeed(sampleFeed, options)
+    expect(podcast.episodes[0]).to.be.an('object')
+  })
+
+  it('should throw a requiredError because of missing required fields', function() {
+    const options = {
+      required : {
+        meta: ['booklink']
+      }
+    }
+    expect(podcastFeedParser.getPodcastFromFeed.bind(podcastFeedParser, sampleFeed, options)).to.throw(ERRORS.requiredError)
+  })
+
+  it('should return an object with uncleaned title field', function() {
+    const options = {
+      uncleaned: {
+        'meta': 'title'
+      }
+    }
+    const podcast = podcastFeedParser.getPodcastFromFeed(sampleFeed, options)
+    expect(podcast.meta.title).to.be.an('array')
+  })
+
+})
+
+/*  tests to write:
+- reordering
+- link redirect
+*/

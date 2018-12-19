@@ -31,18 +31,37 @@ const testFilesPath = path.join(__dirname, 'testfiles')
 
 // console.log(await podcastFeedParser.getPodcastFromURL('http://feeds.gimletmedia.com/hearreplyall'))
 
-const options = {
-  fields : {
-    'meta': ['title', 'description', 'imageURL', 'managingEditor'],
-    'episodes': ['title', 'description', 'pubDate']
-  },
-  required: {
-    'meta': ['title']
-  },
-  uncleaned: {
-    'meta': ['description']
-  }
-}
-const sampleFeed = fs.readFileSync(testFilesPath+'/bc-sample.xml', 'utf8').toString()
-const x = podcastFeedParser.getPodcastFromFeed(sampleFeed)
-console.log(x.episodes[0])
+// const options = {
+//   fields : {
+//     'meta': ['default', 'timeline', 'title'],
+//     'episodes': ['default', 'book', 'description', 'pubDate', 'dogtag']
+//   },
+//   required: {
+//     'meta': ['title'],
+//     'episodes': ['pubDate']
+//   },
+//   uncleaned: {
+//     'meta': ['description']
+//   }
+// }
+// const options = {
+//   required : {
+//     meta: ['title']
+//   }
+// }
+// const options = {
+//   fields: {
+//     'meta': ['title'],
+//     'episodes': ['title', 'pubDate']
+//   },
+//   required : {
+//     'meta': ['title']
+//   },
+//   uncleaned: {
+//     'meta': ['title'],
+//     'episodes': ['title', 'pubDate']
+//   }
+// }
+// const sampleFeed = fs.readFileSync(testFilesPath+'/bc-sample.xml', 'utf8').toString()
+// const x = podcastFeedParser.getPodcastFromFeed(sampleFeed, options)
+// console.log(x)
