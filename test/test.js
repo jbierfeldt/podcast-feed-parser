@@ -168,7 +168,6 @@ describe('Checking custom options', function () {
       }
     }
     const podcast = podcastFeedParser.getPodcastFromFeed(sampleFeed, options)
-    console.log(podcast)
     expect(podcast.meta).to.be.an('object').that.contains.keys('title', 'description', 'webMaster')
     expect(podcast.episodes[0]).to.be.an('object').that.contains.keys('title', 'pubDate', 'timeline')
   })
