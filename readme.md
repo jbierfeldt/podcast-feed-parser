@@ -1,5 +1,7 @@
 [![npm version](https://badge.fury.io/js/podcast-feed-parser.svg)](https://badge.fury.io/js/podcast-feed-parser)
-[![Coverage Status](https://coveralls.io/repos/github/jbierfeldt/podcast-feed-parser/badge.svg?branch=master)](https://coveralls.io/github/jbierfeldt/podcast-feed-parser?branch=master)
+[![Build Status](https://travis-ci.com/jbierfeldt/podcast-feed-parser.svg?branch=master)](https://travis-ci.com/jbierfeldt/podcast-feed-parser)
+
+[![NPM](https://nodei.co/npm/podcast-feed-parser.png)](https://nodei.co/npm/podcast-feed-parser/)
 
 # Table of Contents
 
