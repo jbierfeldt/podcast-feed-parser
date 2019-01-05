@@ -1,6 +1,6 @@
 {
   "name": "podcast-feed-parser",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A highly customizable package for fetching and parsing podcast feeds into simple and manageable JavaScript objects. For use with node and in the browser.",
   "main": "index.js",
   "scripts": {
@@ -13,6 +13,9 @@
   "keywords": [
     "javascript",
     "podcast",
+    "podcast-client",
+    "podcast-fetcher",
+    "podcast-aggregator",
     "rss",
     "parse",
     "parser",
