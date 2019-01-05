@@ -168,6 +168,7 @@ describe('Checking custom options', function () {
       }
     }
     const podcast = podcastFeedParser.getPodcastFromFeed(sampleFeed, options)
+    console.log(podcast)
     expect(podcast.meta).to.be.an('object').that.contains.keys('title', 'description', 'webMaster')
     expect(podcast.episodes[0]).to.be.an('object').that.contains.keys('title', 'pubDate', 'timeline')
   })
@@ -200,6 +201,16 @@ describe('Checking custom options', function () {
     }
     const podcast = podcastFeedParser.getPodcastFromFeed(sampleFeed, options)
     expect(podcast.meta.title).to.be.an('array')
+  })
+
+  it('should return an object with uncleaned duration field', function() {
+    const options = {
+      uncleaned: {
+        'episodes': ['duration']
+      }
+    }
+    const podcast = podcastFeedParser.getPodcastFromFeed(sampleFeed, options)
+    expect(podcast.episodes[0].duration[0]).to.be.a('string')
   })
 })
 
