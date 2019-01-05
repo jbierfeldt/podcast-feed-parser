@@ -1,3 +1,6 @@
+[![npm version](https://badge.fury.io/js/podcast-feed-parser.svg)](https://badge.fury.io/js/podcast-feed-parser)
+[![Coverage Status](https://coveralls.io/repos/github/jbierfeldt/podcast-feed-parser/badge.svg?branch=master)](https://coveralls.io/github/jbierfeldt/podcast-feed-parser?branch=master)
+
 # Table of Contents
 
    * [podcast-feed-parser](#podcast-feed-parser)
