@@ -1,7 +1,7 @@
 {
   "name": "podcast-feed-parser",
-  "version": "0.9.0",
-  "description": "Package for fetching and parsing podcast feeds into JavaScript objects.",
+  "version": "1.0.0",
+  "description": "A highly customizable package for fetching and parsing podcast feeds into simple and manageable JavaScript objects. For use with node and in the browser.",
   "main": "index.js",
   "scripts": {
     "test": "mocha"

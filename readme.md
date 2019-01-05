@@ -15,7 +15,7 @@
 
 # podcast-feed-parser
 
-A highly customizable package for fetching and parsing podcast feeds into simple and managable JavaScript objects.
+A highly customizable package for fetching and parsing podcast feeds into simple and manageable JavaScript objects. For use with node and in the browser.
 
 ## Overview
 By default, `podcast-feed-parser` will parse a podcast's xml feed and return an object with the following properties. `meta` contains all of the information pertinent to the podcast show itself, and `episodes` is list of episode objects which contain the information pertinent to each individual episode of the podcast.
