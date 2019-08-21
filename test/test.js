@@ -148,7 +148,7 @@ describe('Checking custom options', function () {
     const options = {
       fields : {
         'meta': ['default', 'webMaster'],
-        'episodes': ['default', 'timeline']
+        'episodes': ['default', 'timeline', 'guid']
       }
     }
     const podcast = podcastFeedParser.getPodcastFromFeed(sampleFeed, options)
@@ -158,6 +158,7 @@ describe('Checking custom options', function () {
     expect(podcast.episodes[0]).to.be.an('object').that.contains.keys('title', 'description', 'subtitle', 'imageURL', 'pubDate',
         'link', 'language', 'enclosure', 'duration', 'summary', 'blocked',
         'explicit', 'order', 'timeline')
+    expect(podcast.episodes[0].guid).to.equal('9a7e7418443444538633719efdfbe7fa')
   })
 
   it('should return object with only given custom fields', function() {

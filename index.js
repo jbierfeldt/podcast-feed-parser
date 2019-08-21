@@ -261,6 +261,10 @@ const CLEAN = exports.CLEAN = {
     return string
   }
 
+  guid: function (string) {
+    return string
+  }
+
 }
 
 const cleanDefault = exports.cleanDefault = function (node) {
