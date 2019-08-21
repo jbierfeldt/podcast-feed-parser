@@ -259,7 +259,7 @@ const CLEAN = exports.CLEAN = {
 
   imageURL: function (string) {
     return string
-  }
+  },
 
   guid: function (string) {
     return string
