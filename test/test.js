@@ -18,13 +18,13 @@ describe('Reading files', function () {
 
 describe('Fetching Feeds', function () {
   it('should fetch the feed and receive a promise', async function () {
-    await expect(podcastFeedParser.getPodcastFromURL('http://feeds.gimletmedia.com/hearreplyall')).to.be.a('promise')
+    await expect(podcastFeedParser.getPodcastFromURL('http://allthingschemical.libsyn.com/rss')).to.be.a('promise')
   })
   it('should fetch the feed and receive a promise that is fulfilled', async function () {
-    await expect(podcastFeedParser.getPodcastFromURL('http://feeds.gimletmedia.com/hearreplyall')).to.eventually.be.fulfilled
+    await expect(podcastFeedParser.getPodcastFromURL('http://allthingschemical.libsyn.com/rss')).to.eventually.be.fulfilled
   })
   it('should fetch the feed and receive a promise that is rejected', async function () {
-    await expect(podcastFeedParser.getPodcastFromURL('http://feeds.gimletmedia.com/notarealurl')).to.eventually.be.rejected
+    await expect(podcastFeedParser.getPodcastFromURL('http://allthingschemical.libsyn.com/notarealurl')).to.eventually.be.rejected
   })
 })
 
@@ -238,8 +238,10 @@ describe("Checking handling of new-feed-url", function() {
     expect(podcast.meta.title).to.equal('All Things Chemical')
   })
 
+/*
   it('should redirect and fetch new feed', async function() {
     const podcast = await podcastFeedParser.getPodcastFromURL('http://sandbox.bierfeldt.me/podcast-feed-parser/testfiles/bc-sample-new-feed-url.xml')
     expect(podcast.meta.title).to.equal('Reply All')
   })
+*/
 })
