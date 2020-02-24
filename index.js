@@ -217,10 +217,17 @@ const CLEAN = exports.CLEAN = {
   },
 
   owner: function (object) {
-    return {
-      name: object[0]["itunes:name"][0],
-      email: object[0]["itunes:email"][0]
+    let ownerObject = {}
+
+    if (object[0].hasOwnProperty("itunes:name")) {
+      ownerObject.name = object[0]["itunes:name"][0]
     }
+
+    if (object[0].hasOwnProperty("itunes:email")) {
+      ownerObject.email = object[0]["itunes:email"][0]
+    }
+
+    return ownerObject
   },
 
   lastUpdated: function (string) {
