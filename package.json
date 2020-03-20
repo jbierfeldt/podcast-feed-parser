@@ -24,12 +24,14 @@
   "author": "Jackson Bierfeldt <jbierfeldt@gmail.com> (http://bierfeldtaudio.com)",
   "license": "ISC",
   "dependencies": {
-    "isomorphic-fetch": "^2.2.1",
-    "xml2js": "^0.4.19"
+    "xml2js": "^0.4.23"
   },
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.1",
     "expect": "^23.6.0",
     "mocha": "^5.2.0"
   }
