@@ -446,7 +446,7 @@ const getPodcastFromURL = exports.getPodcastFromURL = async function (url, param
     const newURL = channel["itunes:new-feed-url"][0]
 
     if (newURL && newURL != url) {
-      return await getPodcastFromURL(newUrl, params)
+      return await getPodcastFromURL(newURL, params)
     }
 
     const meta = createMetaObjectFromFeed(channel, options)
