@@ -443,7 +443,7 @@ const getPodcastFromURL = exports.getPodcastFromURL = async function (url, param
     const feedResponse = await fetchFeed(url)
     const channel = feedResponse.rss.channel[0]
 
-    const newURL = channel["itunes:new-feed-url"][0]
+    const newURL = channel?.["itunes:new-feed-url"]?.[0]
 
     if (newURL && newURL != url) {
       return await getPodcastFromURL(newURL, params)
