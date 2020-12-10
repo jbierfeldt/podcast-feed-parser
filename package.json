@@ -7,9 +7,9 @@
     "test": "mocha"
   },
   "repository": {
-      "type": "git",
-      "url": "https://github.com/jbierfeldt/podcast-feed-parser.git"
-    },
+    "type": "git",
+    "url": "https://github.com/jbierfeldt/podcast-feed-parser.git"
+  },
   "keywords": [
     "javascript",
     "podcast",
@@ -24,7 +24,7 @@
   "author": "Jackson Bierfeldt <jbierfeldt@gmail.com> (http://bierfeldtaudio.com)",
   "license": "ISC",
   "dependencies": {
-    "isomorphic-fetch": "^2.2.1",
+    "isomorphic-fetch": "^3.0.0",
     "npm": "^6.4.1",
     "xml2js": "^0.4.19"
   },
