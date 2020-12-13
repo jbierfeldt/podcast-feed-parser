@@ -1,6 +1,6 @@
 {
   "name": "podcast-feed-parser",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A highly customizable package for fetching and parsing podcast feeds into simple and manageable JavaScript objects. For use with node and in the browser.",
   "main": "index.js",
   "scripts": {
@@ -25,7 +25,7 @@
   "license": "ISC",
   "dependencies": {
     "isomorphic-fetch": "^3.0.0",
-    "npm": "^6.4.1",
+    "npm": "^7.1.2",
     "xml2js": "^0.4.19"
   },
   "devDependencies": {
