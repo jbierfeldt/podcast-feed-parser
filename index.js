@@ -157,7 +157,7 @@ const GET = exports.GET = {
   },
 
   guid: function (node) {
-    return node.guid[0]._
+    return node.guid && node.guid[0]
   },
 
   duration: function (node) {
@@ -239,6 +239,14 @@ const CLEAN = exports.CLEAN = {
 
   pubDate: function (string) {
     return new Date(string).toISOString()
+  },
+
+  guid: function (string) {
+    if (typeof string === 'object' && '_' in string) {
+      return string._
+    } else {
+      return string
+    }
   },
 
   complete: function (string) {
