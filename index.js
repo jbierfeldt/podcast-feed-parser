@@ -79,12 +79,12 @@ const buildOptions = exports.buildOptions = function (params) {
 
     // if 'default' given in parameters, merge default options with given custom options
     //  and dedupe
-    if (options.fields.meta.indexOf('default') >= 0) {
+    if (options.fields.meta.includes('default')) {
       options.fields.meta = mergeDedupe([DEFAULT.fields.meta, params.fields.meta])
       options.fields.meta.splice(options.fields.meta.indexOf('default'), 1)
     }
 
-    if (options.fields.episodes.indexOf('default') >= 0) {
+    if (options.fields.episodes.includes('default')) {
       options.fields.episodes = mergeDedupe([DEFAULT.fields.episodes, params.fields.episodes])
       options.fields.episodes.splice(options.fields.episodes.indexOf('default'), 1)
     }
@@ -258,9 +258,9 @@ const CLEAN = exports.CLEAN = {
   },
 
   explicit: function (string) {
-    if (['yes', 'explicit', 'true'].indexOf(string[0].toLowerCase()) >= 0) {
+    if (['yes', 'explicit', 'true'].includes(string[0].toLowerCase())) {
       return true
-    } else if (['clean', 'no', 'false'].indexOf(string[0].toLowerCase()) >= 0) {
+    } else if (['clean', 'no', 'false'].includes(string[0].toLowerCase())) {
       return false
     } else {
       return undefined
@@ -318,7 +318,7 @@ function createMetaObjectFromFeed (channel, options) {
     var uncleaned = false
 
     if (options.uncleaned && options.uncleaned.meta) {
-      var uncleaned = (options.uncleaned.meta.indexOf(field) >= 0)
+      var uncleaned = (options.uncleaned.meta.includes(field))
     }
 
     obj[field] = getInfo(channel, field, uncleaned)
@@ -328,7 +328,7 @@ function createMetaObjectFromFeed (channel, options) {
 
   if (options.required && options.required.meta) {
     options.required.meta.forEach( (field) => {
-      if (Object.keys(meta).indexOf(field) < 0) {
+      if (!Object.keys(meta).includes(field)) {
         throw ERRORS.requiredError
       }
     })
@@ -349,7 +349,7 @@ function createEpisodesObjectFromFeed (channel, options) {
       var uncleaned = false
 
       if (options.uncleaned && options.uncleaned.episodes) {
-        var uncleaned = (options.uncleaned.episodes.indexOf(field) >= 0)
+        var uncleaned = (options.uncleaned.episodes.includes(field))
       }
 
       obj[field] = getInfo(item, field, uncleaned)
@@ -359,7 +359,7 @@ function createEpisodesObjectFromFeed (channel, options) {
 
     if (options.required && options.required.episodes) {
       options.required.episodes.forEach( (field) => {
-        if (Object.keys(episode).indexOf(field) < 0) {
+        if (!Object.keys(episode).includes(field)) {
           throw ERRORS.requiredError
         }
       })
