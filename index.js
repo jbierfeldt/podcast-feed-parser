@@ -104,13 +104,12 @@ const buildOptions = exports.buildOptions = function (params) {
 
 const GET = exports.GET = {
   imageURL: function (node) {
+    if (node["itunes:image"]) {
+      return node["itunes:image"][0]['$'].href
+    }
 
     if (node.image) {
       return node.image[0].url[0]
-    }
-
-    if (node["itunes:image"]) {
-      return node["itunes:image"][0]['$'].href
     }
 
     return undefined
