@@ -163,6 +163,13 @@ const GET = exports.GET = {
     return node['itunes:duration']
   },
 
+  keywords: function (node) {
+    if(node["itunes:keywords"] && node["itunes:keywords"].length > 0){
+      return node["itunes:keywords"].map(keywords=>keywords.split(",").map(keyword=>keyword.trim())) 
+    }
+    return [];
+  },
+
   categories: function (node) {
     // returns categories as an array containing each category/sub-category
     // grouping in lists. If there is a sub-category, it is the second element
