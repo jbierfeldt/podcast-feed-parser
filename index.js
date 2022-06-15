@@ -104,13 +104,12 @@ const buildOptions = exports.buildOptions = function (params) {
 
 const GET = exports.GET = {
   imageURL: function (node) {
+    if (node["itunes:image"]) {
+      return node["itunes:image"][0]['$'].href
+    }
 
     if (node.image) {
       return node.image[0].url[0]
-    }
-
-    if (node["itunes:image"]) {
-      return node["itunes:image"][0]['$'].href
     }
 
     return undefined
@@ -162,6 +161,13 @@ const GET = exports.GET = {
 
   duration: function (node) {
     return node['itunes:duration']
+  },
+
+  keywords: function (node) {
+    if(node["itunes:keywords"] && node["itunes:keywords"].length > 0){
+      return node["itunes:keywords"].map(keywords=>keywords.split(",").map(keyword=>keyword.trim())) 
+    }
+    return [];
   },
 
   categories: function (node) {
