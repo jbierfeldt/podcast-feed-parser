@@ -403,6 +403,37 @@ function createEpisodesObjectFromFeed (channel, options) {
   return episodes
 }
 
+
+function createEpisodeObjectFromFeed (item, options) {
+    const episode = {}
+
+    options.fields.episodes.forEach( (field) => {
+      const obj = {}
+      var uncleaned = false
+
+      if (options.uncleaned && options.uncleaned.episodes) {
+        var uncleaned = (options.uncleaned.episodes.includes(field))
+      }
+
+      obj[field] = getInfo(item[0], field, uncleaned)
+
+      Object.assign(episode, obj)
+    })
+
+    if (options.required && options.required.episodes) {
+      options.required.episodes.forEach( (field) => {
+        if (!Object.keys(episode).includes(field)) {
+          throw ERRORS.requiredError
+        }
+      })
+    }
+
+
+
+
+  return episode
+}
+
 /*
 ======================
 === FEED FUNCTIONS ===
@@ -471,6 +502,67 @@ const getPodcastFromURL = exports.getPodcastFromURL = async function (url, param
     throw err
   }
 }
+
+const getPodcastFromRSSLink = exports.getPodcastFromRSSLink = async function (
+  link,
+  params
+) {
+  try {
+    const options = buildOptions(params);
+
+    const feedResponse = await fetchFeed(link);
+
+    const channel = feedResponse.rss.channel[0];
+
+    const podcast =  createMetaObjectFromFeed(channel, options);
+    podcast.episodesNumber = channel?.item?.length;
+    return podcast;
+
+  } catch (err) {
+    throw err;
+  }
+}
+
+const getPodcastEpisodesFromRSSLink = exports.getPodcastEpisodesFromRSSLink = async function (url, params) {
+  try {
+    const options = buildOptions(params)
+
+    const feedResponse = await fetchFeed(url)
+
+    const channel = feedResponse.rss.channel[0]
+
+    if (channel["itunes:new-feed-url"]) {
+      const newURL = channel["itunes:new-feed-url"][0];
+      if (newURL != url) {
+      	return await getPodcastFromURL(channel["itunes:new-feed-url"][0], params)
+      }
+    }
+
+    return createEpisodesObjectFromFeed(channel, options)
+
+  }
+  catch (err) {
+    throw err
+  }
+}
+
+const getEpisodeFromRSSLink = exports.getEpisodeFromRSSLink = async function (url,episodeId, params) {
+  try {
+    const options = buildOptions(params)
+
+    const feedResponse = await fetchFeed(url)
+
+    const channel = feedResponse.rss.channel[0]
+    const item = channel.item.filter(_item => +_item.link[0].split("/")[_item.link[0].split("/").length-1]== episodeId)
+
+    return createEpisodeObjectFromFeed(item, options)
+
+  }
+  catch (err) {
+    throw err
+  }
+}
+
 
 const getPodcastFromFeed = exports.getPodcastFromFeed = function (feed, params) {
   try {
