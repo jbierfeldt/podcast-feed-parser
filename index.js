@@ -116,7 +116,7 @@ const GET = exports.GET = {
   },
 
   subtitle: function (node) {
-    return node['itunes:subtitle']
+    return getValueFromNode(node, 'itunes:subtitle');
   },
 
   lastUpdated: function (node) {
@@ -132,7 +132,7 @@ const GET = exports.GET = {
   },
 
   summary: function (node) {
-    return node['itunes:summary']
+    return getValueFromNode(node, 'itunes:summary');
   },
 
   owner: function (node) {
@@ -160,14 +160,11 @@ const GET = exports.GET = {
   },
 
   duration: function (node) {
-    return node['itunes:duration']
+    return getValueFromNode(node, 'itunes:duration');
   },
 
   keywords: function (node) {
-    if(node["itunes:keywords"] && node["itunes:keywords"].length > 0){
-      return node["itunes:keywords"].map(keywords=>keywords.split(",").map(keyword=>keyword.trim())) 
-    }
-    return [];
+    return getValueFromNode(node, 'itunes:keywords');
   },
 
   categories: function (node) {
@@ -213,16 +210,20 @@ const CLEAN = exports.CLEAN = {
   },
 
   duration: function (string) {
-    // gives duration in seconds
-    let times = string[0].split(':'),
-    sum = 0, mul = 1
-
-    while (times.length > 0) {
-      sum += mul * parseInt(times.pop())
-      mul *= 60
+    // Check if 'string' is actually an array or object due to unexpected data structure.
+    if (Array.isArray(string)) {
+      string = string[0]; // Adjust according to the actual structure you're receiving.
     }
 
-    return sum
+    let times = string.split(':'),
+    sum = 0, mul = 1;
+  
+    while (times.length > 0) {
+      sum += mul * parseInt(times.pop(), 10);
+      mul *= 60;
+    }
+  
+    return sum;
   },
 
   owner: function (object) {
@@ -283,17 +284,54 @@ const CLEAN = exports.CLEAN = {
 
   imageURL: function (string) {
     return string
-  }
-
+  },
+  keywords: function (keywords) {
+    // Check if 'string' is actually a string and contains commas.
+    if (typeof keywords === 'string' && keywords.includes(',')) {
+      return keywords.split(',').map(keyword => keyword.trim());
+    }
+    if (typeof keywords === 'object' && keywords[0].includes(',')) {
+      return keywords[0].split(',').map(keyword => keyword.trim());
+    }
+    // If it's already an array or doesn't contain commas, return it as is.
+    return keywords;
+  },
 }
+
+const getValueFromNode = (node, key) => {
+
+  if(Array.isArray(node[key]) && node[key][0] && typeof node[key][0] === "string"){
+    return node[key];
+  }
+  if (node[key]) {
+    if (Array.isArray(node[key]) && node[key].length > 0) {
+      // Check if the first element is an object with only the '$' key (attributes), 
+      // which should be skipped.
+      if (typeof node[key][0] === 'object' && node[key][0].hasOwnProperty('$') && Object.keys(node[key][0]).length === 1) {
+        // If it's the only element in the array, return an empty string.
+        return '';
+      } else if (typeof node[key][0] === 'object' && '_' in node[key][0]) {
+        // If the value is an object with '_', return the '_' value.
+        return node[key][0]['_'];
+      }
+      // If it's just an array, return the first element.
+      return node[key][0];
+    }
+    // If it's neither an array nor an object with '_', return the value directly.
+    return node[key];
+  }
+  // If the key doesn't exist, return undefined.
+  return undefined;
+};
 
 const cleanDefault = exports.cleanDefault = function (node) {
   // return first item of array
-  if (node !== undefined && node[0]!== undefined) {
+  if (node !== undefined && node[0]!== undefined && Array.isArray(node)) {
     return node[0]
   } else {
     return node
   }
+
 }
 
 /*
